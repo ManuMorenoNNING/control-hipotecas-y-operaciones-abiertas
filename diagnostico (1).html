@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico v2</title>
+<style>
+  body { font-family: monospace; padding: 16px; background: #111; color: #0f0; font-size: 13px; }
+  .test { margin-bottom: 16px; padding: 12px; border: 1px solid #333; border-radius: 8px; }
+  .ok { color: #0f0; } .err { color: #f55; } .warn { color: #fa0; }
+  button { padding: 10px 16px; margin: 4px 0; background: #333; color: #fff; border: none; border-radius: 6px; display: block; width: 100%; }
+  pre { white-space: pre-wrap; word-break: break-all; font-size: 11px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<h2>Diagnóstico v2</h2>
+
+<div class="test">
+  <strong>Info navegador</strong>
+  <pre id="info"></pre>
+</div>
+
+<div class="test">
+  <strong>1. fetch() sin modo</strong>
+  <pre id="r1">Pendiente...</pre>
+  <button onclick="test1()">Probar</button>
+</div>
+
+<div class="test">
+  <strong>2. fetch() mode:no-cors</strong>
+  <pre id="r2">Pendiente...</pre>
+  <button onclick="test2()">Probar</button>
+</div>
+
+<div class="test">
+  <strong>3. fetch() URL final (googleusercontent)</strong>
+  <pre id="r3">Pendiente...</pre>
+  <button onclick="test3()">Probar</button>
+</div>
+
+<div class="test">
+  <strong>4. JSONP con callback</strong>
+  <pre id="r4">Pendiente...</pre>
+  <button onclick="test4()">Probar</button>
+</div>
+
+<div class="test">
+  <strong>5. fetch() URL final SIN redirect</strong>
+  <pre id="r5">Pendiente...</pre>
+  <button onclick="test5()">Probar</button>
+</div>
+
+<script>
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzcA_fvkQy8ZpbjeBnFQTqC04IB4768eXOJwwCxxte4Cl4cTqoQKur0b-VwMzLzkUlb1g/exec?action=listas";
+
+document.getElementById("info").textContent = navigator.userAgent + "\n" + location.href;
+
+async function test1() {
+  const el = document.getElementById("r1");
+  el.textContent = "Cargando...";
+  try {
+    const resp = await fetch(URL_SCRIPT);
+    el.className = "ok";
+    const text = await resp.text();
+    el.textContent = "✅ Status: " + resp.status + " URL: " + resp.url + "\n" + text.substring(0,300);
+  } catch(e) {
+    el.className = "err";
+    el.textContent = "❌ " + e.name + ": " + e.message;
+  }
+}
+
+async function test2() {
+  const el = document.getElementById("r2");
+  el.textContent = "Cargando...";
+  try {
+    const resp = await fetch(URL_SCRIPT, { mode: "no-cors" });
+    el.className = "warn";
+    el.textContent = "⚠️ Respuesta opaca (no-cors) - type: " + resp.type + " status: " + resp.status;
+  } catch(e) {
+    el.className = "err";
+    el.textContent = "❌ " + e.name + ": " + e.message;
+  }
+}
+
+async function test3() {
+  const el = document.getElementById("r3");
+  el.textContent = "Primero necesito la URL final... Abre la URL del script en una pestaña y copia la URL de googleusercontent que aparece en la barra de direcciones. Pégala aqui:";
+  const input = document.createElement("input");
+  input.style = "width:100%;padding:8px;margin:8px 0;background:#222;color:#0f0;border:1px solid #555;border-radius:4px;font-family:monospace;font-size:11px;";
+  input.placeholder = "https://script.googleusercontent.com/...";
+  el.appendChild(document.createElement("br"));
+  el.appendChild(input);
+  const btn = document.createElement("button");
+  btn.textContent = "Probar con esta URL";
+  btn.onclick = async () => {
+    const url = input.value.trim();
+    if (!url) return;
+    try {
+      const resp = await fetch(url);
+      el.className = "ok";
+      const text = await resp.text();
+      el.textContent = "✅ Status: " + resp.status + "\n" + text.substring(0,300);
+    } catch(e) {
+      el.className = "err";
+      el.textContent = "❌ " + e.name + ": " + e.message;
+    }
+  };
+  el.appendChild(btn);
+}
+
+function test4() {
+  const el = document.getElementById("r4");
+  el.textContent = "Cargando...";
+  window.cb_test4 = (data) => {
+    el.className = "ok";
+    el.textContent = "✅ JSONP OK: " + JSON.stringify(data).substring(0,300);
+    delete window.cb_test4;
+  };
+  const s = document.createElement("script");
+  s.src = URL_SCRIPT + "&callback=cb_test4";
+  s.onerror = (e) => { el.className = "err"; el.textContent = "❌ onerror: script no cargó"; };
+  document.head.appendChild(s);
+  setTimeout(() => { if (el.textContent === "Cargando...") { el.className = "err"; el.textContent = "❌ TIMEOUT 10s - callback nunca llamado"; } }, 10000);
+}
+
+async function test5() {
+  const el = document.getElementById("r5");
+  el.textContent = "Cargando con redirect:follow...";
+  try {
+    const resp = await fetch(URL_SCRIPT, { redirect: "follow" });
+    el.className = "ok";
+    const text = await resp.text();
+    el.textContent = "✅ Status: " + resp.status + " URL final: " + resp.url + "\n" + text.substring(0,300);
+  } catch(e) {
+    el.className = "err";
+    el.textContent = "❌ " + e.name + ": " + e.message;
+  }
+}
+</script>
+</body>
+</html>
