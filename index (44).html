@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión Hipotecas · NN & ING</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Georgia, serif; background: #f0f2f5; min-height: 100vh; }
+    .header { background: linear-gradient(135deg, #003366 0%, #002244 100%); padding: 0 24px; box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; flex-wrap: wrap; gap: 8px; }
+    .logo { width: 36px; height: 36px; background: #FF6200; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; flex-shrink: 0; }
+    .brand-title { color: white; font-weight: bold; font-size: 16px; letter-spacing: 1px; }
+    .brand-sub { color: #FF6200; font-size: 11px; letter-spacing: 2px; }
+    .nav { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn { padding: 8px 14px; border-radius: 6px; border: none; cursor: pointer; font-family: inherit; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; background: transparent; color: rgba(255,255,255,0.6); font-weight: normal; transition: all 0.2s; }
+    .nav-btn.active { background: #FF6200; color: white; font-weight: bold; }
+    .content { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    h2 { color: #003366; font-size: 24px; font-weight: bold; }
+    .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 32px; }
+    .stat-card { background: white; border-radius: 12px; padding: 20px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .stat-icon { font-size: 28px; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: bold; }
+    .stat-label { font-size: 13px; color: #6b7280; margin-top: 4px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .card-title { font-weight: bold; color: #003366; margin-bottom: 16px; font-size: 16px; }
+    .big-amount { font-size: 36px; font-weight: bold; color: #FF6200; }
+    .big-sub { font-size: 13px; color: #6b7280; margin-top: 8px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; padding: 10px 14px; border-bottom: 2px solid #f5f5f5; }
+    td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid #f5f5f5; }
+    tr:last-child td { border-bottom: none; }
+    .table-wrap { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); overflow: hidden; }
+    .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-block; }
+    .badge-bank { background: #003366; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+    .badge-tabla { background: rgba(0,51,102,0.12); color: #003366; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+    .filters { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .filters input, .filters select { padding: 8px 14px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; font-family: inherit; outline: none; background: white; }
+    .year-btn { padding: 6px 16px; border-radius: 20px; border: 2px solid #ddd; background: white; color: #1a1a1a; font-weight: bold; font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.2s; margin-right: 4px; }
+    .year-btn.active { border-color: #FF6200; background: #FF6200; color: white; }
+    .order-btn { padding: 6px 16px; border-radius: 20px; border: 2px solid #003366; background: white; color: #003366; font-weight: bold; font-size: 13px; cursor: pointer; font-family: inherit; }
+    .form-box { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 2px solid #FF6200; }
+    .form-title { font-weight: bold; color: #003366; margin-bottom: 20px; font-size: 18px; }
+    .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .form-field label { font-size: 12px; color: #6b7280; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-field input, .form-field select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; font-family: inherit; outline: none; }
+    .form-field input.highlight { border-color: #FF6200; background: #fff8f5; }
+    .form-actions { display: flex; gap: 12px; margin-top: 20px; }
+    .btn-primary { background: #FF6200; color: white; border: none; border-radius: 8px; padding: 10px 24px; cursor: pointer; font-weight: bold; font-size: 14px; font-family: inherit; }
+    .btn-secondary { background: #f5f5f5; color: #1a1a1a; border: none; border-radius: 8px; padding: 10px 24px; cursor: pointer; font-size: 14px; font-family: inherit; }
+    .btn-new { background: #FF6200; color: white; border: none; border-radius: 8px; padding: 10px 20px; cursor: pointer; font-weight: bold; font-size: 14px; font-family: inherit; }
+    .toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; padding: 14px 24px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); font-size: 14px; font-weight: bold; font-family: inherit; color: white; }
+    .toast.ok { background: #10b981; }
+    .toast.error { background: #f59e0b; }
+    .toast.sync { background: #003366; }
+    .mes-block { background: white; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); overflow: hidden; }
+    .mes-header { background: linear-gradient(90deg, #003366, #004488); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .mes-nombre { color: white; font-weight: bold; font-size: 15px; }
+    .mes-total { color: #FF6200; font-weight: bold; font-size: 15px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .prod-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .dark-thead th { background: #003366; color: rgba(255,255,255,0.85); border-bottom: none; padding: 12px 14px; }
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr 1fr; }
+      .header-inner { height: auto; padding: 12px 0; }
+    }
+    @media (max-width: 480px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="logo">N</div>
+      <div>
+        <div class="brand-title">GESTIÓN HIPOTECAS</div>
+        <div class="brand-sub">NATIONALE-NEDERLANDEN · ING</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" onclick="showTab('dashboard')">🏠 Inicio</button>
+      <button class="nav-btn" onclick="showTab('hipotecas')">📋 Expedientes</button>
+      <button class="nav-btn" onclick="showTab('produccion')">📊 Producción</button>
+      <button class="nav-btn" onclick="showTab('comisiones')">💶 Comisiones</button>
+      <button class="nav-btn" onclick="showTab('viabilidad')">🔍 Viabilidad</button>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiLUWYmrEyxWd8oAAmW_ahI-pR4_sr61BHioGmAm-rExbWiA/viewform" target="_blank" class="nav-btn" style="background:#10b981;color:white;text-decoration:none;">📝 Nuevo Exp.</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc77P1yKdzWciIJQjFvW2EmBzhg_KuLgJXUX33rvB59J5SxVA/viewform" target="_blank" class="nav-btn" style="background:#8b5cf6;color:white;text-decoration:none;">➕ Producción</a>
+    </nav>
+  </div>
+</div>
+
+<div class="content">
+  <div id="toast" class="toast" style="display:none;"></div>
+
+  <!-- DASHBOARD -->
+  <div id="tab-dashboard">
+    <div class="section-header">
+      <h2>Resumen General</h2>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:13px;color:#6b7280;font-weight:600;">Año:</span>
+        <div id="year-btns-dashboard"></div>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card" style="border-left:4px solid #003366;"><div class="stat-icon">📋</div><div class="stat-value" id="d-total" style="color:#003366;">0</div><div class="stat-label">Total Expedientes</div></div>
+      <div class="stat-card" style="border-left:4px solid #10b981;"><div class="stat-icon">✅</div><div class="stat-value" id="d-firmados" style="color:#10b981;">0</div><div class="stat-label">Firmados (8)</div></div>
+      <div class="stat-card" style="border-left:4px solid #3b82f6;"><div class="stat-icon">⏳</div><div class="stat-value" id="d-proceso" style="color:#3b82f6;">0</div><div class="stat-label">En Proceso (1-7)</div></div>
+      <div class="stat-card" style="border-left:4px solid #ef4444;"><div class="stat-icon">❌</div><div class="stat-value" id="d-cancelados" style="color:#ef4444;">0</div><div class="stat-label">Cancelados (9)</div></div>
+      <div class="stat-card" style="border-left:4px solid #f59e0b;"><div class="stat-icon">⏸️</div><div class="stat-value" id="d-suspendidos" style="color:#f59e0b;">0</div><div class="stat-label">Suspendidas (10)</div></div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">💶 Comisiones Totales <span id="d-anio-label"></span></div>
+        <div class="big-amount" id="d-comisiones">0 €</div>
+        <div class="big-sub" id="d-comisiones-sub"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Producción por Mes</div>
+        <div id="d-prod-mes"></div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div style="padding:16px 20px;font-weight:bold;color:#003366;font-size:16px;" id="d-exp-title">📋 Expedientes</div>
+      <table><thead><tr><th>Fecha</th><th>Cliente</th><th>Préstamo</th><th>Banco</th><th>Estado</th><th>Agente</th></tr></thead><tbody id="d-exp-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- HIPOTECAS -->
+  <div id="tab-hipotecas" style="display:none;">
+    <div class="section-header">
+      <h2>📋 Expedientes de Hipotecas</h2>
+      <button class="btn-new" onclick="toggleHipForm()">+ Nuevo Expediente</button>
+    </div>
+    <div class="filters">
+      <input type="text" id="busqueda" placeholder="🔍 Buscar por nombre o DNI..." oninput="renderHipotecas()" style="width:240px;">
+      <select id="filtro-estado" onchange="renderHipotecas()"><option value="TODOS">Todos los estados</option></select>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:13px;color:#6b7280;font-weight:600;">Año:</span>
+        <div id="year-btns-exp"></div>
+      </div>
+      <button class="order-btn" id="order-btn" onclick="toggleOrden()">⬇️ Más nuevos primero</button>
+    </div>
+    <div id="hip-form" style="display:none;" class="form-box">
+      <div class="form-title">Nuevo Expediente</div>
+      <div class="form-grid">
+        <div class="form-field"><label>Nombre Titular</label><input type="text" id="f-nombre"></div>
+        <div class="form-field"><label>DNI</label><input type="text" id="f-dni"></div>
+        <div class="form-field"><label>Fecha (dd/mm/aa)</label><input type="text" id="f-fecha"></div>
+        <div class="form-field"><label>Importe Compra-Venta (€)</label><input type="number" id="f-importe-cv"></div>
+        <div class="form-field"><label>Importe Préstamo (€)</label><input type="number" id="f-importe-prestamo"></div>
+        <div class="form-field"><label>Seguro Vida (€/año)</label><input type="number" id="f-seg-vida"></div>
+        <div class="form-field"><label>Seguro Hogar (€/año)</label><input type="number" id="f-seg-hogar"></div>
+        <div class="form-field"><label>Comisión Total (€)</label><input type="number" id="f-comision"></div>
+        <div class="form-field"><label>Banco</label><select id="f-banco"><option>ING</option><option>ABANCA</option><option>SANTANDER</option><option>BBVA</option><option>CAIXABANK</option><option>SABADELL</option><option>BANKINTER</option></select></div>
+        <div class="form-field"><label>Estado</label><select id="f-estado"></select></div>
+        <div class="form-field"><label>Quién lo trae</label><select id="f-agente"><option>VALLS</option><option>NOELIA</option><option>TERESA</option><option>RICHARD RCQ</option><option>SILVIA</option><option>LUISMI</option><option>JOAQUIN</option><option>PACO</option></select></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="guardarExpediente()">Guardar Expediente</button>
+        <button class="btn-secondary" onclick="toggleHipForm()">Cancelar</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead class="dark-thead"><tr><th>Fecha</th><th>Titular</th><th>DNI</th><th>Préstamo</th><th>Banco</th><th>Seg. Vida</th><th>Seg. Hogar</th><th>Comisión</th><th>Estado</th><th>Agente</th></tr></thead>
+        <tbody id="hip-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PRODUCCION -->
+  <div id="tab-produccion" style="display:none;">
+    <div class="section-header">
+      <h2>📊 Producción Mensual</h2>
+      <button class="btn-new" onclick="toggleProdForm()">+ Nueva Producción</button>
+    </div>
+    <div id="prod-form" style="display:none;" class="form-box">
+      <div class="form-title">Nueva Producción</div>
+      <div class="form-grid">
+        <div class="form-field"><label>Mes</label><select id="p-mes"><option>Enero</option><option>Febrero</option><option>Marzo</option><option>Abril</option><option>Mayo</option><option>Junio</option><option>Julio</option><option>Agosto</option><option>Septiembre</option><option>Octubre</option><option>Noviembre</option><option>Diciembre</option></select></div>
+        <div class="form-field"><label>Cliente</label><input type="text" id="p-cliente"></div>
+        <div class="form-field"><label>Producto</label><select id="p-producto" onchange="autoComision()"></select></div>
+        <div class="form-field"><label>Prima (€)</label><input type="number" id="p-prima"></div>
+        <div class="form-field"><label>Tabla Comisión</label><select id="p-tabla" onchange="autoComision()"><option value="T1">Tabla I</option><option value="T2">Tabla II</option></select></div>
+        <div class="form-field"><label>Comisión (€) — Auto</label><input type="number" id="p-comision" class="highlight"></div>
+        <div class="form-field"><label>Estado</label><select id="p-estado"><option value="FIRMADO">Firmado</option><option value="PDTE FIRMAR">Pendiente de firmar</option></select></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="guardarProduccion()">Guardar</button>
+        <button class="btn-secondary" onclick="toggleProdForm()">Cancelar</button>
+      </div>
+    </div>
+    <div id="prod-list"><div style="color:#6b7280;text-align:center;padding:32px;">Cargando producción desde Google Sheets...</div></div>
+  </div>
+
+  <!-- COMISIONES -->
+  <div id="tab-comisiones" style="display:none;">
+    <h2 style="margin-bottom:24px;">💶 Tabla de Comisiones por Producto</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr style="background:#003366;"><th style="color:rgba(255,255,255,0.85);padding:14px 20px;">Producto</th><th style="color:rgba(255,255,255,0.85);padding:14px 20px;">Comisión Tabla I</th><th style="color:rgba(255,255,255,0.85);padding:14px 20px;">Comisión Tabla II</th></tr></thead>
+        <tbody id="comisiones-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VIABILIDAD -->
+  <div id="tab-viabilidad" style="display:none;">
+    <!-- PASO 1: Enlace Drive -->
+    <div id="via-step-link">
+      <div style="max-width:520px;margin:40px auto;text-align:center;">
+        <div style="width:64px;height:64px;border-radius:16px;background:#003366;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+          <span style="font-size:28px;">📁</span>
+        </div>
+        <h2 style="margin-bottom:8px;color:#003366;">Estudio de viabilidad MMM-HI</h2>
+        <p style="color:#6b7280;font-size:14px;margin-bottom:20px;">Pegas el enlace de la carpeta de Drive del cliente para comenzar el análisis</p>
+        <input type="text" id="via-drive-link" placeholder="https://drive.google.com/drive/folders/..." style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:8px;border:1.5px solid #ddd;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px;">
+        <input type="text" id="via-cliente-nombre" placeholder="Nombre del cliente / expediente" style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:8px;border:1.5px solid #ddd;font-size:14px;font-family:inherit;outline:none;margin-bottom:16px;">
+        <button class="btn-primary" style="width:100%;padding:14px;font-size:15px;" onclick="iniciarViabilidad()">Iniciar estudio de viabilidad →</button>
+      </div>
+    </div>
+
+    <!-- PASO 2: Formulario completo -->
+    <div id="via-step-work" style="display:none;">
+      <div class="section-header">
+        <div>
+          <h2 id="via-titulo-cliente" style="margin-bottom:4px;">🔍 Viabilidad</h2>
+          <a id="via-drive-open" href="#" target="_blank" style="font-size:13px;color:#003366;text-decoration:none;">📁 Abrir carpeta en Drive ↗</a>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-primary" onclick="emitirInforme()" style="font-size:13px;padding:8px 16px;">📄 Emitir informe</button>
+          <button class="btn-secondary" onclick="resetViabilidad()" style="font-size:13px;">↺ Nuevo</button>
+        </div>
+      </div>
+
+      <!-- Banner semáforo -->
+      <div id="via-estado-banner" style="border-radius:12px;padding:14px 18px;margin-bottom:20px;color:white;background:#6b7280;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span id="via-estado-label" style="font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;"></span>
+          <span id="via-estado-pct" style="font-size:22px;font-weight:bold;"></span>
+        </div>
+        <p id="via-estado-texto" style="font-size:13px;margin:6px 0 0;opacity:.95;"></p>
+        <p id="via-estado-detalle" style="font-size:11px;margin:4px 0 0;opacity:.8;"></p>
+      </div>
+
+      <div class="two-col">
+        <!-- COL IZQ: Prescoring + Documentos -->
+        <div>
+          <!-- PRESCORING NN/ING -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">📊 Prescoring NN/ING</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+              <div class="form-field"><label>Propósito operación</label>
+                <select id="via-proposito" onchange="calcularPrescoring()" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;font-family:inherit;font-size:13px;">
+                  <option value="hc1">H+C 1ª vivienda</option>
+                  <option value="hc2">H+C 2ª vivienda</option>
+                  <option value="h">Solo Hipoteca</option>
+                  <option value="sub">Subrogación</option>
+                </select>
+              </div>
+              <div class="form-field"><label>Provincia</label>
+                <select id="via-provincia" onchange="calcularPrescoring()" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;font-family:inherit;font-size:13px;">
+                  <option value="MADRID">Madrid</option>
+                  <option value="PAIS_VASCO">País Vasco / Navarra</option>
+                  <option value="CATALUNA">Cataluña</option>
+                  <option value="VALENCIA">Valencia / Cantabria</option>
+                  <option value="MALAGA">Málaga</option>
+                  <option value="RESTO_AND">Resto Andalucía</option>
+                  <option value="RESTO">Resto España</option>
+                </select>
+              </div>
+              <div class="form-field"><label>Importe hipoteca (€)</label>
+                <input type="number" id="via-importe" placeholder="0" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+              </div>
+              <div class="form-field"><label>Valor tasación (€)</label>
+                <input type="number" id="via-tasacion" placeholder="0" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+              </div>
+              <div class="form-field"><label>Valor compraventa (€)</label>
+                <input type="number" id="via-compraventa" placeholder="0" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+              </div>
+              <div class="form-field"><label>Plazo (años)</label>
+                <input type="number" id="via-plazo" placeholder="30" value="30" min="5" max="40" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+              </div>
+              <div class="form-field"><label>Edad titular mayor</label>
+                <input type="number" id="via-edad" placeholder="35" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+              </div>
+              <div class="form-field"><label>Nº titulares</label>
+                <select id="via-titulares" onchange="calcularPrescoring()" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;font-family:inherit;font-size:13px;">
+                  <option value="1">1 titular</option>
+                  <option value="2">2 titulares</option>
+                </select>
+              </div>
+              <div class="form-field"><label>Certificado energético</label>
+                <select id="via-energia" onchange="calcularPrescoring()" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;font-family:inherit;font-size:13px;">
+                  <option value="AB">A o B (verde)</option>
+                  <option value="C">C</option>
+                  <option value="otros">D o inferior</option>
+                </select>
+              </div>
+              <div class="form-field"><label>Seguros</label>
+                <select id="via-seguros" onchange="calcularPrescoring()" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;font-family:inherit;font-size:13px;">
+                  <option value="todos">Vida + Hogar (Todos)</option>
+                  <option value="hogar">Solo Hogar</option>
+                  <option value="ninguno">Ninguno</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Ingresos titulares -->
+            <div style="background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:12px;">
+              <p style="font-size:12px;font-weight:600;color:#003366;margin:0 0 8px;">Ingresos titulares</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div class="form-field"><label>T1 — Ingreso neto/mes (€)</label>
+                  <input type="number" id="via-ingreso1" placeholder="0" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+                </div>
+                <div class="form-field"><label>T1 — Tipo contrato</label>
+                  <select id="via-contrato1" onchange="calcularPrescoring()" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;font-family:inherit;font-size:13px;">
+                    <option value="indefinido">Indefinido</option>
+                    <option value="temporal">Temporal</option>
+                    <option value="autonomo">Autónomo</option>
+                    <option value="funcionario">Funcionario</option>
+                  </select>
+                </div>
+                <div class="form-field"><label>T2 — Ingreso neto/mes (€)</label>
+                  <input type="number" id="via-ingreso2" placeholder="0" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+                </div>
+                <div class="form-field"><label>T2 — Tipo contrato</label>
+                  <select id="via-contrato2" onchange="calcularPrescoring()" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;font-family:inherit;font-size:13px;">
+                    <option value="indefinido">Indefinido</option>
+                    <option value="temporal">Temporal</option>
+                    <option value="autonomo">Autónomo</option>
+                    <option value="funcionario">Funcionario</option>
+                    <option value="na">N/A (1 titular)</option>
+                  </select>
+                </div>
+                <div class="form-field"><label>Gastos mensuales totales (€)</label>
+                  <input type="number" id="via-gastos" placeholder="0" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+                </div>
+                <div class="form-field"><label>Ingresos variables/mes (€)</label>
+                  <input type="number" id="via-variables" placeholder="0" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+                </div>
+                <div class="form-field"><label>Unidad familiar (nº personas)</label>
+                  <input type="number" id="via-familia" placeholder="1" value="1" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+                </div>
+              </div>
+            </div>
+
+            <!-- Deudas -->
+            <div style="background:#fff8f0;border-radius:8px;padding:12px;margin-bottom:14px;border:1px solid #ffe4cc;">
+              <p style="font-size:12px;font-weight:600;color:#003366;margin:0 0 8px;">¿Tiene deudas actuales?</p>
+              <div style="display:flex;gap:10px;margin-bottom:8px;">
+                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="via-deuda-radio" value="si" onchange="toggleDeudas()" style="accent-color:#FF6200;"> Sí</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="radio" name="via-deuda-radio" value="no" onchange="toggleDeudas()" checked style="accent-color:#FF6200;"> No</label>
+              </div>
+              <div id="via-deuda-detalle" style="display:none;">
+                <p style="font-size:11px;color:#FF6200;margin:0 0 8px;">⚠️ Debes aportar los 2 últimos recibos de cada préstamo</p>
+                <input type="number" id="via-cuota-deuda" placeholder="Importe total cuotas mensuales deudas (€)" oninput="calcularPrescoring()" style="width:100%;box-sizing:border-box;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;">
+              </div>
+            </div>
+
+            <!-- Resultados prescoring -->
+            <div id="via-resultados-prescoring" style="display:none;">
+              <p style="font-size:12px;font-weight:700;color:#003366;margin:0 0 8px;text-transform:uppercase;">Resultados orientativos</p>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;">
+                <div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center;">
+                  <div style="font-size:10px;color:#6b7280;text-transform:uppercase;">LTV</div>
+                  <div id="via-res-ltv" style="font-size:18px;font-weight:bold;margin:2px 0;">—</div>
+                  <div style="font-size:9px;color:#9ca3af;">&lt;80% ideal</div>
+                </div>
+                <div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center;">
+                  <div style="font-size:10px;color:#6b7280;text-transform:uppercase;">DTI</div>
+                  <div id="via-res-dti" style="font-size:18px;font-weight:bold;margin:2px 0;">—</div>
+                  <div style="font-size:9px;color:#9ca3af;">&lt;35% ideal</div>
+                </div>
+                <div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center;">
+                  <div style="font-size:10px;color:#6b7280;text-transform:uppercase;">Plazo máx.</div>
+                  <div id="via-res-plazo" style="font-size:18px;font-weight:bold;margin:2px 0;">—</div>
+                  <div style="font-size:9px;color:#9ca3af;">75 - edad límite</div>
+                </div>
+              </div>
+              <div id="via-cuotas-grid" style="overflow-x:auto;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COL DER: Checklist + Comentarios -->
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">📋 Documentación requerida</div>
+            <div id="via-checklist"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">💬 Comentarios y advertencias</div>
+            <textarea id="via-comentarios" placeholder="Anota aquí las advertencias, documentos pendientes, aclaraciones..." style="width:100%;box-sizing:border-box;min-height:120px;padding:10px;border-radius:8px;border:1px solid #ddd;font-size:13px;font-family:inherit;resize:vertical;outline:none;"></textarea>
+            <div id="via-advertencias-auto" style="margin-top:8px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxLBOEMzQSJi-NoG1ijXS5ph-O_g8cLTzpkmCgGr2GjFrLfq-Z1v1ktvY_j_GFh_tRE0g/exec";
+const FORM_EXPEDIENTE = "https://docs.google.com/forms/d/e/1FAIpQLSeiLUWYmrEyxWd8oAAmW_ahI-pR4_sr61BHioGmAm-rExbWiA/viewform";
+const FORM_PRODUCCION = "https://docs.google.com/forms/d/e/1FAIpQLSc77P1yKdzWciIJQjFvW2EmBzhg_KuLgJXUX33rvB59J5SxVA/viewform";
+
+const ESTADOS = ["1- 1ª entrevista","2- solicitud","3- scoring","4- tasación","5- validacion tasacion","6- fein/seguros","7- notaria","8- firmada","9- cancelada","10- suspendida"];
+const PRODUCTOS = [
+  { nombre:"Plan Creciente SIALP", t1:221.40, t2:297.00 },
+  { nombre:"Contigo Futuro", t1:189.60, t2:198.00 },
+  { nombre:"Contigo Familia", t1:221.40, t2:297.00 },
+  { nombre:"Seguro de Vida", t1:328.00, t2:440.00 },
+  { nombre:"Seguro de Hogar", t1:102.50, t2:137.50 },
+  { nombre:"S. Salud", t1:52.48, t2:70.40 },
+  { nombre:"Préstamo Hipotecario", t1:125.00, t2:125.00 },
+  { nombre:"Plan de Pensiones", t1:164.00, t2:100.00 },
+  { nombre:"Contigo Senior", t1:162.21, t2:169.40 },
+  { nombre:"Lider Plus Accidente", t1:70.43, t2:81.27 },
+];
+
+// Los expedientes se cargan en tiempo real desde Google Sheets (ver cargarDatosSheet)
+let hipotecas = [];
+
+// La produccion mensual aun no esta conectada a Sheets (proximo paso)
+let produccion = [];
+
+let anioDashboard = 2026;
+let anioExpedientes = 2026;
+let ordenAsc = false;
+let currentTab = 'dashboard';
+
+function getAnio(fecha) {
+  if (!fecha) return null;
+  const p = fecha.split("/");
+  if (p.length < 3) return null;
+  return p[2].length === 2 ? 2000 + parseInt(p[2]) : parseInt(p[2]);
+}
+
+function parseFecha(f) {
+  if (!f) return 0;
+  const p = f.split("/");
+  const y = p[2]?.length === 2 ? 2000 + parseInt(p[2]) : parseInt(p[2]);
+  return new Date(y, parseInt(p[1]) - 1, parseInt(p[0])).getTime();
+}
+
+function getAnios() {
+  return [...new Set(hipotecas.map(h => getAnio(h.fecha)).filter(Boolean))].sort();
+}
+
+function estadoColor(e) {
+  if (!e) return "#6b7280";
+  const u = e.toUpperCase();
+  if (u.includes("FIRMA") || u === "NOTARIA") return "#10b981";
+  if (u.includes("CANCEL") || u.includes("ANULADO") || u.includes("DESESTIMADA")) return "#ef4444";
+  if (u.includes("TASACION") || u.includes("EXP ABIERTO")) return "#FF6600";
+  if (u.includes("ESTUDIO") || u.includes("ENTREVISTA")) return "#3b82f6";
+  return "#6b7280";
+}
+
+function fmt(n) { return Number(n).toLocaleString("es-ES", { style:"currency", currency:"EUR", minimumFractionDigits:2, maximumFractionDigits:2 }); }
+function fmtN(n) {
+  const num = Number(n);
+  if (isNaN(num)) return "0";
+  // Redondear a 2 decimales, luego formatear con punto de miles
+  const rounded = Math.round(num * 100) / 100;
+  const parts = rounded.toFixed(2).split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  // Eliminar decimales si son ,00
+  const decimal = parts[1] === "00" ? "" : "," + parts[1].replace(/0+$/, "");
+  return parts[0] + decimal;
+}
+
+function showToast(msg, tipo) {
+  const t = document.getElementById("toast");
+  t.className = "toast " + tipo;
+  t.textContent = msg;
+  t.style.display = "block";
+  setTimeout(() => { t.style.display = "none"; }, 4000);
+}
+
+function showTab(tab) {
+  currentTab = tab;
+  ["dashboard","hipotecas","produccion","comisiones","viabilidad"].forEach(t => {
+    document.getElementById("tab-" + t).style.display = t === tab ? "block" : "none";
+  });
+  document.querySelectorAll(".nav-btn").forEach((b, i) => {
+    b.classList.toggle("active", ["dashboard","hipotecas","produccion","comisiones","viabilidad"][i] === tab);
+  });
+  if (tab === "dashboard") renderDashboard();
+  if (tab === "hipotecas") renderHipotecas();
+  if (tab === "produccion") renderProduccion();
+  if (tab === "comisiones") renderComisiones();
+}
+
+function renderYearBtns(containerId, currentAnio, onClickFn) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = "";
+  getAnios().forEach(anio => {
+    const btn = document.createElement("button");
+    btn.className = "year-btn" + (anio === currentAnio ? " active" : "");
+    btn.textContent = anio;
+    btn.onclick = () => onClickFn(anio);
+    c.appendChild(btn);
+  });
+}
+
+function renderDashboard() {
+  renderYearBtns("year-btns-dashboard", anioDashboard, (anio) => { anioDashboard = anio; renderDashboard(); });
+  const hip = hipotecas.filter(h => getAnio(h.fecha) === anioDashboard);
+  document.getElementById("d-total").textContent = hip.length;
+  const getNum = e => parseInt(e) || 0;
+  document.getElementById("d-firmados").textContent = hip.filter(h => getNum(h.estado) === 8).length;
+  document.getElementById("d-proceso").textContent = hip.filter(h => getNum(h.estado) >= 1 && getNum(h.estado) <= 7).length;
+  document.getElementById("d-cancelados").textContent = hip.filter(h => getNum(h.estado) === 9).length;
+  document.getElementById("d-suspendidos").textContent = hip.filter(h => getNum(h.estado) === 10).length;
+  document.getElementById("d-comisiones").textContent = fmt(hip.reduce((s, h) => s + (h.comision || 0), 0));
+  document.getElementById("d-anio-label").textContent = anioDashboard;
+  document.getElementById("d-comisiones-sub").textContent = `Sobre ${hip.length} expedientes de ${anioDashboard}`;
+  document.getElementById("d-exp-title").textContent = `📋 Expedientes ${anioDashboard}`;
+  const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  const mesesUpper = meses.map(m => m.toUpperCase());
+
+  // Construir totales por mes desde los datos del script (totales reales de A2/A3/A4)
+  // Si no hay totales del script, calcular desde las ventas individuales como fallback
+  const prodMesHTML = meses.map((mes, idx) => {
+    const mesU = mesesUpper[idx];
+    const t = window._totalesMes && window._totalesMes[mesU];
+    if (!t && !produccion.some(p => p.mes && p.mes.toUpperCase() === mesU)) return "";
+
+    const rF = t ? (t.riquezaFirmado   || 0) : 0;
+    const rP = t ? (t.riquezaPorFirmar || 0) : 0;
+    const pF = t ? (t.pagoFirmado      || 0) : 0;
+    const pP = t ? (t.pagoPorFirmar    || 0) : 0;
+    const kF = t ? (t.riesgoFirmado    || 0) : 0;
+    const kP = t ? (t.riesgoPorFirmar  || 0) : 0;
+
+    if (!rF && !rP && !pF && !pP && !kF && !kP) return "";
+
+    return "<div style=\"margin-bottom:12px;padding:10px;background:#f8fafc;border-radius:8px;border-left:3px solid #FF6200;\">" +
+      "<div style=\"font-weight:700;font-size:14px;color:#003B5C;margin-bottom:8px;\">" + mes + "</div>" +
+      "<div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:12px;\">" +
+        "<div style=\"font-weight:600;color:#6b7280;border-bottom:1px solid #e5e7eb;padding-bottom:4px;\">Riqueza</div>" +
+        "<div style=\"font-weight:600;color:#6b7280;border-bottom:1px solid #e5e7eb;padding-bottom:4px;\">Pago</div>" +
+        "<div style=\"font-weight:600;color:#6b7280;border-bottom:1px solid #e5e7eb;padding-bottom:4px;\">Riesgo</div>" +
+        "<div><span style=\"color:#6b7280;font-size:10px;\">Firmado</span><br><b style=\"color:#1FA971;\">" + fmtN(rF) + "€</b></div>" +
+        "<div><span style=\"color:#6b7280;font-size:10px;\">Firmado</span><br><b style=\"color:#1FA971;\">" + fmtN(pF) + "€</b></div>" +
+        "<div><span style=\"color:#6b7280;font-size:10px;\">Firmado</span><br><b style=\"color:#1FA971;\">" + fmtN(kF) + "€</b></div>" +
+        "<div><span style=\"color:#6b7280;font-size:10px;\">Pdte.</span><br><b style=\"color:#F5B041;\">" + fmtN(rP) + "€</b></div>" +
+        "<div><span style=\"color:#6b7280;font-size:10px;\">Pdte.</span><br><b style=\"color:#F5B041;\">" + fmtN(pP) + "€</b></div>" +
+        "<div><span style=\"color:#6b7280;font-size:10px;\">Pdte.</span><br><b style=\"color:#F5B041;\">" + fmtN(kP) + "€</b></div>" +
+      "</div></div>";
+  }).filter(Boolean).join("") || "<span style='color:#6b7280;font-size:13px;'>Sin datos</span>";
+
+  document.getElementById("d-prod-mes").innerHTML = prodMesHTML;
+  const sorted = [...hip].sort((a,b) => parseFecha(b.fecha) - parseFecha(a.fecha));
+  document.getElementById("d-exp-tbody").innerHTML = sorted.length ? sorted.map(h => `
+    <tr><td style="color:#6b7280;">${h.fecha}</td><td style="font-weight:600;">${h.nombre}</td><td>${fmtN(h.importe_prestamo)}€</td>
+    <td><span class="badge-bank">${h.banco}</span></td>
+    <td><span class="badge" style="background:${estadoColor(h.estado)}22;color:${estadoColor(h.estado)};">${h.estado}</span></td>
+    <td style="color:#6b7280;">${h.agente}</td></tr>`).join("") :
+    `<tr><td colspan="6" style="text-align:center;padding:32px;color:#6b7280;">No hay expedientes para ${anioDashboard}</td></tr>`;
+}
+
+function toggleOrden() {
+  ordenAsc = !ordenAsc;
+  document.getElementById("order-btn").textContent = ordenAsc ? "⬆️ Más antiguos primero" : "⬇️ Más nuevos primero";
+  renderHipotecas();
+}
+
+function renderHipotecas() {
+  renderYearBtns("year-btns-exp", anioExpedientes, (anio) => { anioExpedientes = anio; renderHipotecas(); });
+  const busqueda = (document.getElementById("busqueda")?.value || "").trim().toLowerCase();
+  const filtroEstado = document.getElementById("filtro-estado")?.value || "TODOS";
+  const buscando = busqueda.length > 0;
+
+  let filtered = hipotecas.filter(h => {
+    const matchAnio = buscando ? true : getAnio(h.fecha) === anioExpedientes;
+    const matchEstado = filtroEstado === "TODOS" || (h.estado || "").toLowerCase().trim() === filtroEstado.toLowerCase().trim();
+    const matchBusq = !buscando || h.nombre?.toLowerCase().includes(busqueda) || h.dni?.toLowerCase().includes(busqueda);
+    return matchAnio && matchEstado && matchBusq;
+  }).sort((a,b) => ordenAsc ? parseFecha(a.fecha) - parseFecha(b.fecha) : parseFecha(b.fecha) - parseFecha(a.fecha));
+
+  // Aviso de busqueda global activa
+  const yearBtnsContainer = document.getElementById("year-btns-exp");
+  if (buscando) {
+    yearBtnsContainer.style.opacity = "0.4";
+    yearBtnsContainer.title = "Búsqueda activa: mostrando resultados de todos los años";
+  } else {
+    yearBtnsContainer.style.opacity = "1";
+    yearBtnsContainer.title = "";
+  }
+
+  document.getElementById("hip-tbody").innerHTML = filtered.length ? filtered.map(h => `
+    <tr><td style="color:#6b7280;">${h.fecha}</td><td style="font-weight:600;">${h.nombre}</td><td style="color:#6b7280;">${h.dni}</td>
+    <td style="font-weight:600;color:#003366;">${fmtN(h.importe_prestamo)}€</td>
+    <td><span class="badge-bank">${h.banco}</span></td>
+    <td>${h.seg_vida}€</td><td>${h.seg_hogar}€</td>
+    <td style="font-weight:bold;color:#FF6200;">${fmtN(h.comision)}€</td>
+    <td><span class="badge" style="background:${estadoColor(h.estado)}22;color:${estadoColor(h.estado)};">${h.estado}</span></td>
+    <td style="color:#6b7280;">${h.agente}</td></tr>`).join("") :
+    `<tr><td colspan="10" style="text-align:center;padding:32px;color:#6b7280;">No se encontraron expedientes</td></tr>`;
+}
+
+function toggleHipForm() {
+  const f = document.getElementById("hip-form");
+  f.style.display = f.style.display === "none" ? "block" : "none";
+  if (f.style.display === "block") {
+    const d = new Date(); document.getElementById("f-fecha").value = d.toLocaleDateString("es-ES");
+  }
+}
+
+async function guardarExpediente() {
+  const nombre = document.getElementById("f-nombre").value;
+  if (!nombre) { showToast("⚠️ El nombre es obligatorio", "error"); return; }
+  const nuevo = {
+    id: hipotecas.length + 1,
+    fecha: document.getElementById("f-fecha").value,
+    nombre,
+    dni: document.getElementById("f-dni").value,
+    importe_cv: Number(document.getElementById("f-importe-cv").value),
+    importe_prestamo: Number(document.getElementById("f-importe-prestamo").value),
+    banco: document.getElementById("f-banco").value,
+    estado: document.getElementById("f-estado").value,
+    agente: document.getElementById("f-agente").value,
+    seg_vida: Number(document.getElementById("f-seg-vida").value),
+    seg_hogar: Number(document.getElementById("f-seg-hogar").value),
+    comision: Number(document.getElementById("f-comision").value),
+  };
+  hipotecas.push(nuevo);
+  const anioNuevo = getAnio(nuevo.fecha);
+  if (anioNuevo) { anioExpedientes = anioNuevo; anioDashboard = anioNuevo; }
+  toggleHipForm();
+  renderHipotecas();
+  showToast("🔄 Sincronizando con Google Sheets...", "sync");
+  const params = new URLSearchParams({
+    fecha: nuevo.fecha, nombre: nuevo.nombre, dni: nuevo.dni,
+    importe_cv: nuevo.importe_cv, importe_prestamo: nuevo.importe_prestamo,
+    banco: nuevo.banco, seg_vida: nuevo.seg_vida, seg_hogar: nuevo.seg_hogar,
+    comision: nuevo.comision, estado: nuevo.estado, agente: nuevo.agente
+  });
+  // Tecnica de "imagen invisible": el navegador hace la peticion GET
+  // al script y sigue las redirecciones de Google sin bloqueos CORS.
+  const img = new Image();
+  img.onload = () => showToast("✅ Expediente enviado a Google Sheets", "ok");
+  img.onerror = () => showToast("✅ Expediente enviado a Google Sheets", "ok"); // GAS no devuelve imagen, pero la peticion ya se realizo
+  img.src = `${SCRIPT_URL}?${params.toString()}`;
+}
+
+function toggleProdForm() {
+  const f = document.getElementById("prod-form");
+  f.style.display = f.style.display === "none" ? "block" : "none";
+}
+
+function autoComision() {
+  const prod = PRODUCTOS.find(p => p.nombre === document.getElementById("p-producto").value);
+  const tabla = document.getElementById("p-tabla").value;
+  if (prod) document.getElementById("p-comision").value = tabla === "T1" ? prod.t1 : prod.t2;
+}
+
+async function guardarProduccion() {
+  const cliente = document.getElementById("p-cliente").value;
+  if (!cliente) { showToast("⚠️ El cliente es obligatorio", "error"); return; }
+  const nuevo = {
+    id: produccion.length + 1,
+    mes: document.getElementById("p-mes").value,
+    cliente,
+    producto: document.getElementById("p-producto").value,
+    prima: Number(document.getElementById("p-prima").value),
+    tabla: document.getElementById("p-tabla").value,
+    comision: Number(document.getElementById("p-comision").value),
+    estado: document.getElementById("p-estado").value,
+  };
+  produccion.push(nuevo);
+  toggleProdForm();
+  renderProduccion();
+
+  // Sincronizar con Google Sheets (escribe en la pestaña del mes correspondiente)
+  showToast("🔄 Sincronizando con Google Sheets...", "sync");
+  const params = new URLSearchParams({
+    action: "guardar_produccion",
+    mes: nuevo.mes,
+    cliente: nuevo.cliente,
+    producto: nuevo.producto,
+    prima: nuevo.prima,
+    tabla: nuevo.tabla,
+    comision: nuevo.comision,
+    estado: nuevo.estado,
+  });
+  try {
+    await fetch(`${SCRIPT_URL}?${params.toString()}`, { method: "GET", mode: "no-cors" });
+    showToast("✅ Producción guardada en Google Sheets", "ok");
+  } catch(error) {
+    console.error(error);
+    showToast("❌ Error al guardar producción", "error");
+  }
+}
+
+function renderProduccion() {
+  const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  const mesActual = new Date().getMonth(); // 0-based
+
+  // Ordenar: mes actual primero, luego siguiente, luego anteriores de más reciente a más antiguo
+  const mesesOrdenados = [];
+  mesesOrdenados.push(meses[mesActual]);
+  mesesOrdenados.push(meses[(mesActual + 1) % 12]);
+  for (let i = mesActual - 1; i >= 0; i--) mesesOrdenados.push(meses[i]);
+  for (let i = 11; i > mesActual + 1; i--) mesesOrdenados.push(meses[i]);
+
+  document.getElementById("prod-list").innerHTML = mesesOrdenados.filter(m => produccion.some(p => p.mes === m)).map(m => {
+    // Separar firmados y pendientes, ordenados de más reciente a más antiguo
+    const firmados  = produccion.filter(p => p.mes === m && (p.estado === "FIRMADO" || p.estado === "firmado"))
+                                .sort((a,b) => (b.fechaFirmado||"").localeCompare(a.fechaFirmado||""));
+    const pendientes = produccion.filter(p => p.mes === m && p.estado !== "FIRMADO" && p.estado !== "firmado");
+    const totalFirmado  = firmados.reduce((s,p) => s + (p.comision||0), 0);
+    const totalPendiente = pendientes.reduce((s,p) => s + (p.comision||0), 0);
+
+    const filasFirmados = firmados.map(p => `<tr style="background:#f0fdf4;">
+      <td style="font-weight:600;">${p.cliente}</td><td>${p.producto}</td>
+      <td>${p.prima ? fmtN(p.prima)+"€" : "-"}</td>
+      <td><span class="badge-tabla">${p.tabla}</span></td>
+      <td style="font-weight:bold;color:#1FA971;">${fmtN(p.comision)}€</td>
+      <td style="font-size:11px;color:#6b7280;">${p.fechaFirmado||""}</td>
+    </tr>`).join("");
+
+    const filasPendientes = pendientes.map(p => `<tr style="background:#fffbeb;">
+      <td style="font-weight:600;">${p.cliente}</td><td>${p.producto}</td>
+      <td>${p.prima ? fmtN(p.prima)+"€" : "-"}</td>
+      <td><span class="badge-tabla">${p.tabla}</span></td>
+      <td style="font-weight:bold;color:#F5B041;">${fmtN(p.comision)}€</td>
+      <td style="font-size:11px;color:#F5B041;">Pdte. firma</td>
+    </tr>`).join("");
+
+    const mesU = m.toUpperCase();
+    const t = window._totalesMes && window._totalesMes[mesU];
+    const rF = t ? (t.riquezaFirmado   || 0) : 0;
+    const rP = t ? (t.riquezaPorFirmar || 0) : 0;
+    const pF = t ? (t.pagoFirmado      || 0) : 0;
+    const pP = t ? (t.pagoPorFirmar    || 0) : 0;
+    const kF = t ? (t.riesgoFirmado    || 0) : 0;
+    const kP = t ? (t.riesgoPorFirmar  || 0) : 0;
+
+    // Funcion para formatear importe con espacio fijo de 6 digitos
+    const pad = (n) => fmtN(n).padStart(9, '\u00a0');
+
+    return `<div class="mes-block">
+      <div class="mes-header">
+        <span class="mes-nombre">${m}</span>
+        <span style="font-family:monospace;font-size:12px;color:white;display:flex;gap:24px;">
+          <span>Riqueza&nbsp;&nbsp;<b style="color:#1FA971;">${pad(rF)}€</b>&nbsp;&nbsp;<b style="color:#F5B041;">${pad(rP)}€</b></span>
+          <span>Pago&nbsp;&nbsp;<b style="color:#1FA971;">${pad(pF)}€</b>&nbsp;&nbsp;<b style="color:#F5B041;">${pad(pP)}€</b></span>
+          <span>Riesgo&nbsp;&nbsp;<b style="color:#1FA971;">${pad(kF)}€</b>&nbsp;&nbsp;<b style="color:#F5B041;">${pad(kP)}€</b></span>
+        </span>
+      </div>
+      <table><thead><tr>
+        <th>Cliente</th><th>Producto</th><th>Prima</th><th>Tabla</th><th>Comisión</th><th>Estado</th>
+      </tr></thead>
+      <tbody>
+        ${firmados.length ? `<tr><td colspan="6" style="font-size:11px;font-weight:bold;color:#1FA971;padding:6px 14px;background:#f0fdf4;border-bottom:1px solid #d1fae5;">✅ FIRMADO (${firmados.length})</td></tr>${filasFirmados}` : ""}
+        ${pendientes.length ? `<tr><td colspan="6" style="font-size:11px;font-weight:bold;color:#F5B041;padding:6px 14px;background:#fffbeb;border-bottom:1px solid #fef3c7;">⏳ PENDIENTE DE FIRMA (${pendientes.length})</td></tr>${filasPendientes}` : ""}
+      </tbody></table>
+    </div>`;
+  }).join("") || "<div style='color:#6b7280;text-align:center;padding:32px;'>Sin datos de producción</div>";
+}
+
+function renderComisiones() {
+  document.getElementById("comisiones-tbody").innerHTML = PRODUCTOS.map((p,i) => `
+    <tr style="background:${i%2===0?"white":"#fafafa"};">
+      <td style="padding:14px 20px;font-weight:600;">${p.nombre}</td>
+      <td style="padding:14px 20px;font-weight:bold;color:#003366;">${fmt(p.t1)}</td>
+      <td style="padding:14px 20px;font-weight:bold;color:#FF6200;">${fmt(p.t2)}</td>
+    </tr>`).join("");
+}
+
+// INIT
+ESTADOS.forEach(e => {
+  [document.getElementById("filtro-estado"), document.getElementById("f-estado")].forEach(sel => {
+    if (!sel) return;
+    const o = document.createElement("option"); o.value = e; o.textContent = e; sel.appendChild(o);
+  });
+});
+PRODUCTOS.forEach(p => {
+  const sel = document.getElementById("p-producto");
+  const o = document.createElement("option"); o.value = p.nombre; o.textContent = p.nombre; sel.appendChild(o);
+});
+autoComision();
+const aniosInit = getAnios();
+if (aniosInit.length) {
+  anioDashboard = Math.max(...aniosInit);
+  anioExpedientes = Math.max(...aniosInit);
+}
+document.getElementById("d-exp-tbody").innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:#6b7280;">Cargando expedientes desde Google Sheets...</td></tr>`;
+renderDashboard();
+
+// ── CARGA DINÁMICA DESDE GOOGLE SHEETS ──────────────────────────────
+function jsonp(url, callbackName, timeoutMs = 15000) {
+  return new Promise((resolve) => {
+    let done = false;
+
+    window[callbackName] = (data) => {
+      if (done) return;
+      done = true;
+      limpiar();
+      resolve(data);
+    };
+
+    const s = document.createElement("script");
+    s.id = "_jsonp_" + callbackName;
+    s.async = true;
+
+    // Construimos la URL correctamente sin duplicar callback
+    const conector = url.includes("?") ? "&" : "?";
+    s.src = `${url}${conector}callback=${callbackName}`;
+
+    s.onerror = () => {
+      if (done) return;
+      done = true;
+      limpiar();
+      resolve(null);
+    };
+
+    function limpiar() {
+      try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
+      const el = document.getElementById("_jsonp_" + callbackName);
+      if (el) el.remove();
+    }
+
+    document.head.appendChild(s);
+    setTimeout(() => {
+      if (!done) { done = true; limpiar(); resolve(null); }
+    }, timeoutMs);
+  });
+}
+
+async function fetchJson(url, callbackName) {
+  // fetchJson delega en jsonp() que construye la URL correctamente.
+  // NO concatenamos callback aqui para evitar duplicarlo.
+  return jsonp(url, callbackName);
+}
+
+async function cargarDatosSheet() {
+  showToast("🔄 Cargando datos...", "sync");
+  const listas = await fetchJson(`${SCRIPT_URL}?action=listas`, "cb_listas");
+  const data26 = await fetchJson(`${SCRIPT_URL}?action=expedientes&hoja=EXP HIPOTECAS 2026`, "cb_exp26");
+  const data25 = await fetchJson(`${SCRIPT_URL}?action=expedientes&hoja=EXP HIPOTECAS 2025`, "cb_exp25");
+  const dataProd = await fetchJson(`${SCRIPT_URL}?action=produccion`, "cb_prod");
+
+  console.log("Listas:", listas);
+  console.log("2026:", data26);
+  console.log("2025:", data25);
+  console.log("Produccion:", dataProd);
+
+  // 1. Listas (bancos + agentes)
+  if (listas && listas.bancos && listas.bancos.length) {
+    ["f-banco"].forEach(id => {
+      const sel = document.getElementById(id);
+      if (!sel) return;
+      sel.innerHTML = "";
+      listas.bancos.forEach(b => { const o = document.createElement("option"); o.value = b; o.textContent = b; sel.appendChild(o); });
+    });
+  }
+  if (listas && listas.agentes && listas.agentes.length) {
+    ["f-agente"].forEach(id => {
+      const sel = document.getElementById(id);
+      if (!sel) return;
+      sel.innerHTML = "";
+      listas.agentes.forEach(a => { const o = document.createElement("option"); o.value = a; o.textContent = a; sel.appendChild(o); });
+    });
+  }
+
+  // 2. Expedientes 2026
+  if (data26 && data26.expedientes && data26.expedientes.length) {
+    hipotecas = data26.expedientes.map((e, i) => ({ ...e, id: i + 1 }));
+  }
+
+  // 3. Expedientes 2025
+  if (data25 && data25.expedientes && data25.expedientes.length) {
+    const exp25 = data25.expedientes.map((e, i) => ({ ...e, id: hipotecas.length + i + 1 }));
+    hipotecas = [...hipotecas, ...exp25];
+  }
+
+  // 4. Produccion mensual (todas las pestañas ENERO-DICIEMBRE)
+  if (dataProd && dataProd.ventas && dataProd.ventas.length) {
+    produccion = dataProd.ventas.map((v, i) => ({
+      id: i + 1,
+      mes: v.mes.charAt(0) + v.mes.slice(1).toLowerCase(),
+      cliente: v.cliente,
+      producto: v.producto,
+      prima: v.prima,
+      comision: v.comision,
+      tabla: v.tabla,
+      estado: v.estado,           // ✅ FIRMADO o PDTE FIRMAR
+      fechaFirmado: v.fechaFirmado // ✅ fecha de firma
+    }));
+  }
+  if (dataProd && dataProd.totales) {
+    // Normalizar claves a mayusculas sin espacios para evitar bugs de comparacion
+    const totalesNorm = {};
+    Object.keys(dataProd.totales).forEach(k => {
+      totalesNorm[k.trim().toUpperCase()] = dataProd.totales[k];
+    });
+    window._totalesMes = totalesNorm;
+  }
+
+  // 5. Si NADA se pudo cargar, avisar claramente en vez de dejar todo vacio en silencio
+  const todoFallo = !listas && !data26 && !data25 && !dataProd;
+  if (todoFallo) {
+    document.getElementById("d-exp-tbody").innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:#ef4444;">⚠️ No se pudo conectar con Google Sheets. Revisa tu conexión e intenta recargar la página.</td></tr>`;
+  }
+
+  // 6. Refrescar UI con datos reales
+  const anios = getAnios();
+  if (anios.length) {
+    anioDashboard = Math.max(...anios);
+    anioExpedientes = Math.max(...anios);
+  }
+  renderDashboard();
+  if (currentTab === "hipotecas") renderHipotecas();
+  if (currentTab === "produccion") renderProduccion();
+}
+
+cargarDatosSheet();
+
+// == VIABILIDAD MMM-HI ==
+
+var VIA_TINI = {
+  MADRID:     { lt80:2.65, r80_120:2.60, r120_160:2.55, r160_200:2.10, r200_400:2.05, r400_600:1.90, gt600:1.75 },
+  PAIS_VASCO: { lt80:2.60, r80_120:2.55, r120_160:2.50, r160_200:2.05, r200_400:2.00, r400_600:2.05, gt600:2.05 },
+  CATALUNA:   { lt80:3.30, r80_120:3.25, r120_160:3.20, r160_200:2.75, r200_400:2.70, r400_600:2.55, gt600:2.40 },
+  VALENCIA:   { lt80:3.25, r80_120:3.20, r120_160:3.15, r160_200:2.70, r200_400:2.60, r400_600:2.45, gt600:2.30 },
+  MALAGA:     { lt80:3.05, r80_120:3.00, r120_160:2.95, r160_200:2.50, r200_400:2.40, r400_600:2.25, gt600:2.10 },
+  RESTO_AND:  { lt80:3.05, r80_120:3.00, r120_160:2.95, r160_200:2.50, r200_400:2.40, r400_600:2.25, gt600:2.10 },
+  RESTO:      { lt80:3.05, r80_120:3.00, r120_160:2.95, r160_200:2.50, r200_400:2.40, r400_600:2.25, gt600:2.10 }
+};
+var EURIBOR = 0.025;
+var EURIBOR_STRESS = 0.0425;
+var BC_MIN = {1:810, 2:1100, 3:1301, 4:1501, 5:1701};
+var VIA_DOCS_COMUNES = [
+  {id:'dni',      label:'DNI/NIE vigente',              carpeta:'01_ID',      peso:'Alta', obligatorio:true},
+  {id:'vida_lab', label:'Vida laboral',                 carpeta:'02_LABORAL', peso:'Alta', obligatorio:true},
+  {id:'nominas',  label:'Ultimas 3 nominas',            carpeta:'02_LABORAL', peso:'Alta', obligatorio:true},
+  {id:'renta',    label:'Declaracion Renta (IRPF)',      carpeta:'03_FISCAL',  peso:'Alta', obligatorio:true},
+  {id:'extractos',label:'Extractos bancarios 3-6 meses',carpeta:'04_BANCO',   peso:'Alta', obligatorio:true},
+  {id:'nota_s',   label:'Nota simple registral',        carpeta:'05_INMO',    peso:'Alta', obligatorio:true}
+];
+var VIA_DOC_AUTONOMO = [
+  {id:'ss_aut',   label:'Recibos S.Social autonomo (2 ult.)', carpeta:'03_FISCAL', peso:'Alta', obligatorio:true},
+  {id:'mod130',   label:'Modelo 130 / IVA trimestral',        carpeta:'03_FISCAL', peso:'Alta', obligatorio:true}
+];
+var VIA_DOC_DEUDAS = [
+  {id:'rec_deuda',label:'Recibos prestamos actuales (2 ult.)', carpeta:'04_BANCO', peso:'Alta', obligatorio:true}
+];
+var VIA_DOC_OPCIONAL = [
+  {id:'cirbe',    label:'CIRBE (bancos tienen acceso directo)',carpeta:'04_BANCO', peso:'Media', obligatorio:false},
+  {id:'escritura',label:'Escritura/Arras (segun operacion)',  carpeta:'05_INMO',  peso:'Media', obligatorio:false},
+  {id:'tasacion', label:'Tasacion (si existe)',               carpeta:'05_INMO',  peso:'Baja',  obligatorio:false}
+];
+var viaCheck = {};
+
+function viaGetDocs() {
+  var hayDeuda = document.querySelector('[name="via-deuda-radio"]:checked') &&
+                 document.querySelector('[name="via-deuda-radio"]:checked').value === 'si';
+  var c1 = document.getElementById('via-contrato1') ? document.getElementById('via-contrato1').value : '';
+  var c2 = document.getElementById('via-contrato2') ? document.getElementById('via-contrato2').value : '';
+  var esAut = c1 === 'autonomo' || c2 === 'autonomo';
+  var docs = VIA_DOCS_COMUNES.slice();
+  if (esAut) docs = docs.concat(VIA_DOC_AUTONOMO);
+  if (hayDeuda) docs = docs.concat(VIA_DOC_DEUDAS);
+  return docs.concat(VIA_DOC_OPCIONAL);
+}
+
+function viaGetRango(imp) {
+  if (imp < 80000)  return 'lt80';
+  if (imp < 120000) return 'r80_120';
+  if (imp < 160000) return 'r120_160';
+  if (imp < 200000) return 'r160_200';
+  if (imp < 400000) return 'r200_400';
+  if (imp < 600000) return 'r400_600';
+  return 'gt600';
+}
+
+function viaCuota(capital, anos, tae) {
+  var r = tae / 12, n = anos * 12;
+  if (r === 0) return capital / n;
+  return capital * r * Math.pow(1+r,n) / (Math.pow(1+r,n) - 1);
+}
+
+function calcularPrescoring() {
+  var imp = parseFloat(document.getElementById('via-importe').value) || 0;
+  var tas = parseFloat(document.getElementById('via-tasacion').value) || 0;
+  var cpv = parseFloat(document.getElementById('via-compraventa').value) || 0;
+  var anos = parseInt(document.getElementById('via-plazo').value) || 30;
+  var edad = parseInt(document.getElementById('via-edad').value) || 0;
+  var ing1 = parseFloat(document.getElementById('via-ingreso1').value) || 0;
+  var ing2 = parseFloat(document.getElementById('via-ingreso2').value) || 0;
+  var gast = parseFloat(document.getElementById('via-gastos').value) || 0;
+  var vari = parseFloat(document.getElementById('via-variables').value) || 0;
+  var fam  = parseInt(document.getElementById('via-familia').value) || 1;
+  var prov = document.getElementById('via-provincia').value;
+  var seg  = document.getElementById('via-seguros').value;
+  var energ = document.getElementById('via-energia').value;
+  var prop = document.getElementById('via-proposito').value;
+  var hayDeuda = document.querySelector('[name="via-deuda-radio"]:checked') &&
+                 document.querySelector('[name="via-deuda-radio"]:checked').value === 'si';
+  var cDeuda = hayDeuda ? (parseFloat(document.getElementById('via-cuota-deuda') && document.getElementById('via-cuota-deuda').value) || 0) : 0;
+
+  if (!imp || (!ing1 && !ing2)) {
+    document.getElementById('via-resultados-prescoring').style.display = 'none';
+    return;
+  }
+
+  var ingt = ing1 + ing2 + vari;
+  var ltv = tas > 0 ? (imp/tas)*100 : (cpv > 0 ? (imp/cpv)*100 : null);
+  var plazoMax = edad > 0 ? Math.min(anos, 75-edad) : anos;
+  if (plazoMax < 1) plazoMax = 1;
+
+  var tiniData = VIA_TINI[prov] || VIA_TINI.RESTO;
+  var rng = viaGetRango(imp);
+  var dif = tiniData[rng] / 100;
+  if (seg === 'hogar')   dif += 0.40/100;
+  if (seg === 'ninguno') dif += 0.55/100;
+  if (energ === 'AB')    dif -= 0.10/100;
+  if (energ === 'C')     dif -= 0.05/100;
+  if (prop === 'hc2')    dif += 0.10/100;
+  if (prop === 'sub')    dif += 0.20/100;
+
+  var mods = [
+    {nombre:'TINI 1',   tae:EURIBOR+dif,         str:EURIBOR_STRESS+dif},
+    {nombre:'Mixta 5',  tae:EURIBOR+dif+0.001,   str:EURIBOR_STRESS+dif+0.001},
+    {nombre:'Mixta 10', tae:EURIBOR+dif+0.003,   str:EURIBOR_STRESS+dif+0.003},
+    {nombre:'Mixta 15', tae:EURIBOR+dif+0.005,   str:EURIBOR_STRESS+dif+0.005},
+    {nombre:'Fija 25',  tae:dif+0.0425,           str:dif+0.0425}
+  ];
+
+  var bcMin = BC_MIN[Math.min(fam,5)] || 1701;
+  var filas = '';
+  mods.forEach(function(m) {
+    var cuota = viaCuota(imp, plazoMax, m.tae);
+    var cuotaStr = viaCuota(imp, plazoMax, m.str);
+    var dti  = ingt > 0 ? ((cuota+cDeuda+gast)/ingt) : null;
+    var dtiS = ingt > 0 ? ((cuotaStr+cDeuda+gast)/ingt) : null;
+    var bc   = ingt > 0 ? (ingt-cuotaStr-cDeuda-gast) : null;
+    var estado, color;
+    if (dtiS !== null && dtiS <= 0.40 && bc !== null && bc >= bcMin) { estado='OK'; color='#10b981'; }
+    else if (dtiS !== null && dtiS <= 0.50) { estado='Revisar'; color='#f59e0b'; }
+    else { estado='KO'; color='#ef4444'; }
+    filas += '<tr>' +
+      '<td style="font-weight:600;font-size:12px;padding:5px 8px;">' + m.nombre + '</td>' +
+      '<td style="font-size:12px;padding:5px 8px;">' + (m.tae*100).toFixed(2) + '%</td>' +
+      '<td style="font-size:12px;font-weight:600;padding:5px 8px;">' + Math.round(cuota).toLocaleString('es-ES') + 'EUR</td>' +
+      '<td style="font-size:12px;padding:5px 8px;">' + (dti !== null ? (dti*100).toFixed(1)+'%' : '-') + '</td>' +
+      '<td style="font-size:12px;padding:5px 8px;">' + (dtiS !== null ? (dtiS*100).toFixed(1)+'%' : '-') + '</td>' +
+      '<td style="padding:5px 8px;"><span style="background:' + color + '22;color:' + color + ';padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;">' + estado + '</span></td>' +
+      '</tr>';
+  });
+  document.getElementById('via-cuotas-grid').innerHTML =
+    '<table style="width:100%;font-size:12px;border-collapse:collapse;">' +
+    '<thead><tr style="background:#003366;">' +
+    '<th style="color:white;padding:6px 8px;text-align:left;font-size:11px;">Modalidad</th>' +
+    '<th style="color:white;padding:6px 8px;text-align:left;font-size:11px;">TAE</th>' +
+    '<th style="color:white;padding:6px 8px;text-align:left;font-size:11px;">Cuota</th>' +
+    '<th style="color:white;padding:6px 8px;text-align:left;font-size:11px;">DTI</th>' +
+    '<th style="color:white;padding:6px 8px;text-align:left;font-size:11px;">DTI stress</th>' +
+    '<th style="color:white;padding:6px 8px;text-align:left;font-size:11px;">Estado</th>' +
+    '</tr></thead><tbody>' + filas + '</tbody></table>';
+
+  var ltvColor = ltv === null ? '#9ca3af' : ltv <= 70 ? '#10b981' : ltv <= 80 ? '#f59e0b' : '#ef4444';
+  var ltvEl = document.getElementById('via-res-ltv');
+  ltvEl.textContent = ltv !== null ? ltv.toFixed(1)+'%' : '-';
+  ltvEl.style.color = ltvColor;
+
+  var cuotaRef = viaCuota(imp, plazoMax, mods[0].tae);
+  var dtiVal = ingt > 0 ? ((cuotaRef+cDeuda)/ingt*100).toFixed(1)+'%' : '-';
+  var dtiColor = ingt > 0 ? ((cuotaRef+cDeuda)/ingt <= 0.35 ? '#10b981' : (cuotaRef+cDeuda)/ingt <= 0.45 ? '#f59e0b' : '#ef4444') : '#9ca3af';
+  var dtiEl = document.getElementById('via-res-dti');
+  dtiEl.textContent = dtiVal;
+  dtiEl.style.color = dtiColor;
+
+  document.getElementById('via-res-plazo').textContent = plazoMax + 'a';
+  document.getElementById('via-resultados-prescoring').style.display = 'block';
+
+  // Advertencias
+  var avisos = [];
+  if (ltv !== null && ltv > 80) avisos.push('AVISO: LTV > 80% - riesgo alto');
+  if (ltv !== null && ltv > 100) avisos.push('LIMITE: LTV > 100% - inviable sin garantias');
+  if (plazoMax < 20 && edad > 0) avisos.push('AVISO: Plazo maximo ' + plazoMax + ' anos por edad del titular');
+  if (ingt < 1500) avisos.push('AVISO: Ingresos bajos - verificar BC minimo con banco');
+  var docs = viaGetDocs();
+  var faltanO = docs.filter(function(d){ return d.obligatorio && viaCheck[d.id] !== 'recibido'; });
+  if (faltanO.length > 0) avisos.push('DOCS: Faltan ' + faltanO.length + ' documento(s) obligatorio(s)');
+  document.getElementById('via-advertencias-auto').innerHTML = avisos.map(function(a){
+    return '<div style="font-size:12px;color:#92400e;background:#fef3c7;border-radius:6px;padding:6px 10px;margin-bottom:4px;">' + a + '</div>';
+  }).join('');
+
+  renderViaChecklist();
+  calcularSemaforo();
+}
+
+function toggleDeudas() {
+  var val = document.querySelector('[name="via-deuda-radio"]:checked');
+  document.getElementById('via-deuda-detalle').style.display = (val && val.value === 'si') ? 'block' : 'none';
+  renderViaChecklist();
+  calcularPrescoring();
+}
+
+function renderViaChecklist() {
+  var docs = viaGetDocs();
+  var carpetas = [];
+  docs.forEach(function(d){ if(carpetas.indexOf(d.carpeta)<0) carpetas.push(d.carpeta); });
+  var html = '';
+  carpetas.forEach(function(c){
+    var items = '';
+    docs.filter(function(d){ return d.carpeta===c; }).forEach(function(d){
+      var st = viaCheck[d.id] || 'falta';
+      var col = st==='recibido' ? '#10b981' : st==='caducado' ? '#f59e0b' : '#d1d5db';
+      var ic  = st==='recibido' ? 'v' : st==='caducado' ? '!' : 'x';
+      var badge = d.obligatorio ? '' : '<span style="font-size:9px;background:#e5e7eb;border-radius:4px;padding:1px 5px;color:#6b7280;margin-left:4px;">Opcional</span>';
+      items += '<div onclick="viaToggle(\'' + d.id + '\')" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:white;border:1px solid #eee;border-radius:8px;margin-bottom:5px;cursor:pointer;">' +
+        '<div style="width:22px;height:22px;border-radius:50%;background:' + col + ';color:white;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;">' + ic + '</div>' +
+        '<div><div style="font-size:13px;font-weight:500;">' + d.label + badge + '</div>' +
+        '<div style="font-size:10px;color:#9ca3af;">' + c + ' - Prioridad ' + d.peso + '</div></div></div>';
+    });
+    html += '<div style="margin-bottom:12px;"><p style="font-size:10px;font-weight:700;color:#003366;margin:0 0 5px;font-family:monospace;">' + c + '</p>' + items + '</div>';
+  });
+  document.getElementById('via-checklist').innerHTML = html;
+  calcularSemaforo();
+}
+
+function viaToggle(id) {
+  var cur = viaCheck[id] || 'falta';
+  viaCheck[id] = cur==='falta' ? 'recibido' : cur==='recibido' ? 'caducado' : 'falta';
+  renderViaChecklist();
+}
+
+function calcularSemaforo() {
+  var docs = viaGetDocs();
+  var oblig = docs.filter(function(d){ return d.obligatorio; });
+  var recibidos = docs.filter(function(d){ return viaCheck[d.id]==='recibido'; }).length;
+  var recibidosO = oblig.filter(function(d){ return viaCheck[d.id]==='recibido'; }).length;
+  var pct = Math.round(recibidos/docs.length*100);
+  var faltaO = oblig.some(function(d){ return viaCheck[d.id]!=='recibido'; });
+  var color, label, texto;
+  if (!faltaO) { color='#10b981'; label='VERDE - COMPLETO'; texto='Documentacion obligatoria completa. Listo para revision.'; }
+  else if (recibidosO >= Math.ceil(oblig.length*0.6)) { color='#f59e0b'; label='AMBAR - INCOMPLETO'; texto='Documentacion parcial. El informe se emite con advertencias.'; }
+  else { color='#ef4444'; label='ROJO - INSUFICIENTE'; texto='Documentacion critica pendiente. Se emite informe provisional.'; }
+  document.getElementById('via-estado-banner').style.background = color;
+  document.getElementById('via-estado-label').textContent = label;
+  document.getElementById('via-estado-pct').textContent = pct + '%';
+  document.getElementById('via-estado-texto').textContent = texto;
+  document.getElementById('via-estado-detalle').textContent = recibidosO + '/' + oblig.length + ' obligatorios - ' + recibidos + '/' + docs.length + ' total';
+}
+
+function iniciarViabilidad() {
+  var link = document.getElementById('via-drive-link').value.trim();
+  if (!link) { showToast('Pega el enlace de Drive primero', 'error'); return; }
+  var nombre = document.getElementById('via-cliente-nombre').value.trim();
+  viaCheck = {};
+  document.getElementById('via-titulo-cliente').textContent = 'Viabilidad' + (nombre ? ' - ' + nombre : '');
+  document.getElementById('via-drive-open').href = link;
+  document.getElementById('via-step-link').style.display = 'none';
+  document.getElementById('via-step-work').style.display = 'block';
+  renderViaChecklist();
+}
+
+function resetViabilidad() {
+  viaCheck = {};
+  ['via-drive-link','via-cliente-nombre','via-comentarios',
+   'via-importe','via-tasacion','via-compraventa','via-plazo',
+   'via-edad','via-ingreso1','via-ingreso2','via-gastos','via-variables','via-familia'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.value = id==='via-plazo' ? '30' : id==='via-familia' ? '1' : '';
+  });
+  document.getElementById('via-advertencias-auto').innerHTML = '';
+  document.getElementById('via-resultados-prescoring').style.display = 'none';
+  document.getElementById('via-step-work').style.display = 'none';
+  document.getElementById('via-step-link').style.display = 'block';
+}
+
+function emitirInforme() {
+  var nombre = document.getElementById('via-titulo-cliente').textContent;
+  var comentarios = document.getElementById('via-comentarios').value;
+  var docs = viaGetDocs();
+  var faltanO = docs.filter(function(d){ return d.obligatorio && viaCheck[d.id]!=='recibido'; });
+  var recibidos = docs.filter(function(d){ return viaCheck[d.id]==='recibido'; });
+  var pct = Math.round(recibidos.length/docs.length*100);
+  var banner = document.getElementById('via-estado-label').textContent;
+  var ltv = document.getElementById('via-res-ltv').textContent;
+  var dti = document.getElementById('via-res-dti').textContent;
+  var importe = document.getElementById('via-importe').value;
+  var ing1 = document.getElementById('via-ingreso1').value;
+  var ing2 = document.getElementById('via-ingreso2').value;
+  var fecha = new Date().toLocaleDateString('es-ES');
+  var advertencias = faltanO.length > 0 ? faltanO.map(function(d){ return '- ' + d.label; }).join('\n') : 'Sin pendientes.';
+  var resumen = '====================================\n' +
+    'INFORME MMM-HI - BORRADOR\n' + nombre.toUpperCase() + '\nFecha: ' + fecha + '\n' +
+    '====================================\n\n' +
+    'ESTADO: ' + banner + '\nCompletitud: ' + pct + '%\n\n' +
+    'DATOS FINANCIEROS\n' +
+    '  Importe: ' + (importe ? Number(importe).toLocaleString('es-ES') + ' EUR' : '-') + '\n' +
+    '  LTV: ' + ltv + '\n  DTI (TINI 1): ' + dti + '\n' +
+    '  Ingresos T1: ' + (ing1 ? Number(ing1).toLocaleString('es-ES') + ' EUR/mes' : '-') + '\n' +
+    '  Ingresos T2: ' + (ing2 ? Number(ing2).toLocaleString('es-ES') + ' EUR/mes' : '-') + '\n\n' +
+    'DOCUMENTOS RECIBIDOS (' + recibidos.length + '/' + docs.length + ')\n' +
+    (recibidos.map(function(d){ return 'v ' + d.label; }).join('\n') || '  Ninguno') + '\n\n' +
+    'DOCUMENTOS PENDIENTES (obligatorios)\n' + advertencias + '\n\n' +
+    'COMENTARIOS DEL ASESOR\n' + (comentarios || '-') + '\n\n' +
+    '====================================\n' +
+    'AVISO: Este informe es ORIENTATIVO.\n' +
+    'No replica el motor de riesgos de la entidad.\n' +
+    'Revision humana obligatoria antes de presentar al banco.\n' +
+    '====================================';
+  if (navigator.clipboard) navigator.clipboard.writeText(resumen).catch(function(){});
+  var w = window.open('', '_blank', 'width=600,height=700');
+  if (w) {
+    w.document.write('<html><head><title>Informe MMM-HI</title></head><body style="font-family:monospace;padding:24px;background:#f9f9f9;"><pre>' + resumen + '</pre><button onclick="window.print()" style="margin-top:16px;padding:10px 20px;background:#FF6200;color:white;border:none;border-radius:6px;cursor:pointer;font-size:14px;">Imprimir / Guardar PDF</button></body></html>');
+    w.document.close();
+  }
+}
+
+</script>
+</body>
+</html>
